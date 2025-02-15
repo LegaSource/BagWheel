@@ -18,5 +18,10 @@ namespace BagWheel.Patches
             gameObject.GetComponent<NetworkObject>().Spawn();
             BagWheel.mls.LogInfo("Spawning BagWheelNetworkManager");
         }
+
+        [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.OnDisable))]
+        [HarmonyPostfix]
+        public static void OnDisable()
+            => BagWheelNetworkManager.Instance = null;
     }
 }
