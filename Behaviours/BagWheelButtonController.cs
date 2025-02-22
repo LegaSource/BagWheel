@@ -7,28 +7,37 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace BagWheel.Behaviours
 {
     public class BagWheelButtonController : MonoBehaviour, IPointerEnterHandler, IEventSystemHandler, IPointerExitHandler, IPointerClickHandler
     {
-        public Type itemType;
         public int Id;
-        private Animator animator;
         public string itemName;
+
+        public Button button;
+        private Animator animator;
         public TextMeshProUGUI itemText;
 
         private void Start()
-            => animator = GetComponent<Animator>();
+        {
+            button = GetComponent<Button>();
+            animator = GetComponent<Animator>();
+        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            if (!button.interactable) return;
+
             animator.SetBool("Hover", true);
             itemText.text = itemName;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            if (!button.interactable) return;
+
             animator.SetBool("Hover", false);
             itemText.text = "";
         }
@@ -43,9 +52,9 @@ namespace BagWheel.Behaviours
 
         public bool SearchItem()
         {
-            if (itemType == null)
+            if (string.IsNullOrEmpty(itemName))
             {
-                BagWheel.mls.LogError("SearchItem: itemType is not initialized!");
+                BagWheel.mls.LogError("SearchItem: itemName is not assigned!");
                 return false;
             }
 
@@ -60,8 +69,8 @@ namespace BagWheel.Behaviours
                 {
                     GrabbableObject grabbableObjectBag = beltBagItem.objectsInBag[j];
                     if (grabbableObjectBag == null) continue;
-                    if (!itemType.IsAssignableFrom(grabbableObjectBag.GetType())) continue;
-
+                    if (grabbableObjectBag.itemProperties.itemName.IndexOf(itemName, StringComparison.OrdinalIgnoreCase) == -1) continue;
+                    
                     PlayerControllerBPatch.beltBagItem = beltBagItem;
                     PlayerControllerBPatch.bagItem = new KeyValuePair<int, GrabbableObject>(j, grabbableObjectBag);
 

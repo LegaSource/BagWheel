@@ -19,7 +19,7 @@ namespace BagWheel
     {
         private const string modGUID = "Lega.BagWheel";
         private const string modName = "Bag Wheel";
-        private const string modVersion = "1.0.0";
+        private const string modVersion = "1.0.3";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         private readonly static AssetBundle bundle = AssetBundle.LoadFromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "bagwheel"));
@@ -42,6 +42,7 @@ namespace BagWheel
         public static Sprite jetpackSprite;
         public static Sprite extensionLadderSprite;
         public static Sprite radarBoosterSprite;
+        public static Sprite weedKillerSprite;
 
         public static GameObject managerPrefab = NetworkPrefabs.CreateNetworkPrefab("BagWheelNetworkManager");
 
@@ -103,6 +104,7 @@ namespace BagWheel
             jetpackSprite = bundle.LoadAsset<Sprite>("Assets/Sprites/Icons/JetpackIcon.png");
             extensionLadderSprite = bundle.LoadAsset<Sprite>("Assets/Sprites/Icons/ExtensionLadderIcon.png");
             radarBoosterSprite = bundle.LoadAsset<Sprite>("Assets/Sprites/Icons/RadarBoosterIcon.png");
+            weedKillerSprite = bundle.LoadAsset<Sprite>("Assets/Sprites/Icons/WeedKillerIcon.png");
         }
 
         public static void PatchOtherMods(Harmony harmony)

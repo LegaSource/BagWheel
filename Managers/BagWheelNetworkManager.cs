@@ -126,11 +126,13 @@ namespace BagWheel.Managers
         {
             if (player.IsOwner)
             {
-                player.SetSpecialGrabAnimationBool(setTrue: false, player.currentlyHeldObjectServer);
+                player.SetSpecialGrabAnimationBool(setTrue: false, grabbableObject);
                 HUDManager.Instance.holdingTwoHandedItem.enabled = false;
             }
             player.playerBodyAnimator.SetBool("cancelHolding", value: true);
             player.isHoldingObject = false;
+            player.twoHanded = false;
+            player.twoHandedAnimation = false;
             grabbableObject.EnablePhysics(enable: false);
             grabbableObject.EnableItemMeshes(enable: true);
             grabbableObject.isHeld = false;
@@ -139,6 +141,8 @@ namespace BagWheel.Managers
             grabbableObject.targetFloorPosition = new Vector3(3000f, -400f, 3000f);
             grabbableObject.startFallingPosition = new Vector3(3000f, -400f, 3000f);
             player.currentlyHeldObjectServer = null;
+            player.currentlyHeldObject = null;
+            player.playerBodyAnimator.SetTrigger(grabbableObject.itemProperties.twoHandedAnimation ? "SwitchHoldAnimationTwoHanded" : "SwitchHoldAnimation");
         }
     }
 }

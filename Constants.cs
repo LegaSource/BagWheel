@@ -4,18 +4,20 @@
     {
         // Configs
         public const string GLOBAL = "_Global_";
+        public const string DISABLED = "DISABLED";
         // Items
-        public const string FLASHLIGHT = "FLASHLIGHT";
-        public const string SHOVEL = "SHOVEL";
-        public const string SPRAY_PAINT = "SPRAY PAINT";
-        public const string WALKIE_TALKIE = " WALKIE TALKIE";
-        public const string STUN_GRENADE = "STUN GRENADE";
-        public const string BOOMBOX = "BOOMBOX";
-        public const string ZAP_GUN = "ZAP GUN";
-        public const string TZP = "TZP";
-        public const string LOCKPICKER = "LOCKPICKER";
-        public const string JETPACK = "JETPACK";
-        public const string EXTENSION_LADDER = "EXTENSION LADDER";
-        public const string RADAR_BOOSTER = "RADAR BOOSTER";
+        public const string FLASHLIGHT = "Flashlight";
+        public const string SHOVEL = "Shovel";
+        public const string SPRAY_PAINT = "Spray Paint";
+        public const string WALKIE_TALKIE = "Walkie-Talkie";
+        public const string STUN_GRENADE = "Stun Grenade";
+        public const string BOOMBOX = "Boombox";
+        public const string ZAP_GUN = "Zap Gun";
+        public const string TZP = "TZP-Inhalant";
+        public const string LOCKPICKER = "Lockpicker";
+        public const string JETPACK = "Jetpack";
+        public const string EXTENSION_LADDER = "Extension Ladder";
+        public const string RADAR_BOOSTER = "Radar-Booster";
+        public const string WEED_KILLER = "Weed Killer";
     }
 }

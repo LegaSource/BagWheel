@@ -32,7 +32,7 @@ namespace BagWheel.CustomInputs
             if (BagWheel.bagWheelInterface == null) return;
 
             PlayerControllerB player = GameNetworkManager.Instance?.localPlayerController;
-            if (player == null) return;
+            if (player == null || player.twoHanded || player.inSpecialInteractAnimation) return;
             if (!HasBeltBagItem(player)) return;
 
             BagWheelController.OpenBagWheel(!BagWheelController.bagWheelSelected);

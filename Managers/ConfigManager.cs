@@ -15,8 +15,16 @@ namespace BagWheel.Managers
         {
             bagWheel = BagWheel.configFile.Bind("Global",
                 "Bag wheel",
-                $"1:{Constants.FLASHLIGHT},2:{Constants.SHOVEL},3:{Constants.SPRAY_PAINT},4:{Constants.WALKIE_TALKIE},5:{Constants.STUN_GRENADE},6:{Constants.BOOMBOX},7:{Constants.ZAP_GUN},8:{Constants.TZP}",
-                $"Bag wheel configuration.\nAccepted item names: {Constants.FLASHLIGHT}, {Constants.SHOVEL}, {Constants.SPRAY_PAINT}, {Constants.WALKIE_TALKIE}, {Constants.STUN_GRENADE}, {Constants.BOOMBOX}, {Constants.ZAP_GUN}, {Constants.TZP}, {Constants.LOCKPICKER}, {Constants.JETPACK}, {Constants.EXTENSION_LADDER}, {Constants.RADAR_BOOSTER}.");
+                $"1:{Constants.FLASHLIGHT}:{Constants.FLASHLIGHT}," +
+                    $"2:{Constants.SHOVEL}:{Constants.SHOVEL}," +
+                    $"3:{Constants.SPRAY_PAINT}:{Constants.SPRAY_PAINT}," +
+                    $"4:{Constants.WALKIE_TALKIE}:{Constants.WALKIE_TALKIE}," +
+                    $"5:{Constants.STUN_GRENADE}:{Constants.STUN_GRENADE}," +
+                    $"6:{Constants.BOOMBOX}:{Constants.BOOMBOX}," +
+                    $"7:{Constants.ZAP_GUN}:{Constants.ZAP_GUN}," +
+                    $"8:{Constants.TZP}:{Constants.TZP}",
+                $"Bag wheel configuration.\nThe format is Slot:ItemName:ImageName, accepted image names: {Constants.FLASHLIGHT}, {Constants.SHOVEL}, {Constants.SPRAY_PAINT}, {Constants.WALKIE_TALKIE}, {Constants.STUN_GRENADE}, {Constants.BOOMBOX}, {Constants.ZAP_GUN}, {Constants.TZP}, {Constants.LOCKPICKER}, {Constants.JETPACK}, {Constants.EXTENSION_LADDER}, {Constants.RADAR_BOOSTER}, {Constants.WEED_KILLER}." +
+                $"\nTo deactivate a slot put {Constants.DISABLED} in place of the name.");
         }
 
         public static void ConfigureWheelButtons()
@@ -34,7 +42,7 @@ namespace BagWheel.Managers
             foreach (string item in items)
             {
                 string[] values = item.Split(':');
-                if (values.Length == 2)
+                if (values.Length == 3)
                 {
                     BagWheelButtonController bagButton = BagWheel.bagWheelInterface.GetComponentsInChildren<BagWheelButtonController>().FirstOrDefault(b => b.gameObject.name.Equals($"BagWheelButton{values[0]}"));
                     if (bagButton == null)
@@ -42,12 +50,12 @@ namespace BagWheel.Managers
                         BagWheel.mls.LogError($"Script not found for the {item} config");
                         return;
                     }
-                    ConfigureWheelButton(ref bagButton, values[1]);
+                    ConfigureWheelButton(ref bagButton, values[1], values[2]);
                 }
             }
         }
 
-        private static void ConfigureWheelButton(ref BagWheelButtonController bagButton, string name)
+        private static void ConfigureWheelButton(ref BagWheelButtonController bagButton, string name, string spriteName)
         {
             Image imageButton = bagButton.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(b => b.gameObject.name.Equals("Icon"));
             if (imageButton == null)
@@ -56,58 +64,30 @@ namespace BagWheel.Managers
                 return;
             }
 
-            bagButton.itemName = name;
-            switch (bagButton.itemName)
+            if (Constants.DISABLED.Equals(name))
             {
-                case Constants.FLASHLIGHT:
-                    bagButton.itemType = typeof(FlashlightItem);
-                    imageButton.sprite = BagWheel.flashlightSprite;
-                    break;
-                case Constants.SHOVEL:
-                    bagButton.itemType = typeof(Shovel);
-                    imageButton.sprite = BagWheel.shovelSprite;
-                    break;
-                case Constants.SPRAY_PAINT:
-                    bagButton.itemType = typeof(SprayPaintItem);
-                    imageButton.sprite = BagWheel.sprayPaintSprite;
-                    break;
-                case Constants.WALKIE_TALKIE:
-                    bagButton.itemType = typeof(WalkieTalkie);
-                    imageButton.sprite = BagWheel.walkieTalkieSprite;
-                    break;
-                case Constants.STUN_GRENADE:
-                    bagButton.itemType = typeof(StunGrenadeItem);
-                    imageButton.sprite = BagWheel.stunGrenadeSprite;
-                    break;
-                case Constants.BOOMBOX:
-                    bagButton.itemType = typeof(BoomboxItem);
-                    imageButton.sprite = BagWheel.boomboxSprite;
-                    break;
-                case Constants.ZAP_GUN:
-                    bagButton.itemType = typeof(PatcherTool);
-                    imageButton.sprite = BagWheel.zapGunSprite;
-                    break;
-                case Constants.TZP:
-                    bagButton.itemType = typeof(TetraChemicalItem);
-                    imageButton.sprite = BagWheel.tzpSprite;
-                    break;
-                case Constants.LOCKPICKER:
-                    bagButton.itemType = typeof(LockPicker);
-                    imageButton.sprite = BagWheel.lockpickerSprite;
-                    break;
-                case Constants.JETPACK:
-                    bagButton.itemType = typeof(JetpackItem);
-                    imageButton.sprite = BagWheel.jetpackSprite;
-                    break;
-                case Constants.EXTENSION_LADDER:
-                    bagButton.itemType = typeof(ExtensionLadderItem);
-                    imageButton.sprite = BagWheel.extensionLadderSprite;
-                    break;
-                case Constants.RADAR_BOOSTER:
-                    bagButton.itemType = typeof(RadarBoosterItem);
-                    imageButton.sprite = BagWheel.radarBoosterSprite;
-                    break;
+                bagButton.gameObject.GetComponent<Button>().interactable = false;
+                return;
             }
+
+            bagButton.itemName = name;
+            imageButton.sprite = spriteName switch
+            {
+                Constants.FLASHLIGHT => BagWheel.flashlightSprite,
+                Constants.SHOVEL => BagWheel.shovelSprite,
+                Constants.SPRAY_PAINT => BagWheel.sprayPaintSprite,
+                Constants.WALKIE_TALKIE => BagWheel.walkieTalkieSprite,
+                Constants.STUN_GRENADE => BagWheel.stunGrenadeSprite,
+                Constants.BOOMBOX => BagWheel.boomboxSprite,
+                Constants.ZAP_GUN => BagWheel.zapGunSprite,
+                Constants.TZP => BagWheel.tzpSprite,
+                Constants.LOCKPICKER => BagWheel.lockpickerSprite,
+                Constants.JETPACK => BagWheel.jetpackSprite,
+                Constants.EXTENSION_LADDER => BagWheel.extensionLadderSprite,
+                Constants.RADAR_BOOSTER => BagWheel.radarBoosterSprite,
+                Constants.WEED_KILLER => BagWheel.weedKillerSprite,
+                _ => BagWheel.shovelSprite
+            };
         }
     }
 }
