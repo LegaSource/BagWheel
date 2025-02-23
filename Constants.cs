@@ -6,6 +6,7 @@
         public const string GLOBAL = "_Global_";
         public const string DISABLED = "DISABLED";
         // Items
+        public const string PRO_FLASHLIGHT = "Pro-flashlight";
         public const string FLASHLIGHT = "Flashlight";
         public const string SHOVEL = "Shovel";
         public const string SPRAY_PAINT = "Spray Paint";
@@ -19,5 +20,6 @@
         public const string EXTENSION_LADDER = "Extension Ladder";
         public const string RADAR_BOOSTER = "Radar-Booster";
         public const string WEED_KILLER = "Weed Killer";
+        public const string KNIFE = "Kitchen Knife";
     }
 }

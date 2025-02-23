@@ -1,8 +1,8 @@
 ﻿using BagWheel.Managers;
 using BagWheel.Patches;
 using GameNetcodeStuff;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -15,6 +15,7 @@ namespace BagWheel.Behaviours
     {
         public int Id;
         public string itemName;
+        public List<string> eligibleItems = new List<string>();
 
         public Button button;
         private Animator animator;
@@ -58,6 +59,12 @@ namespace BagWheel.Behaviours
                 return false;
             }
 
+            if (!eligibleItems.Any())
+            {
+                BagWheel.mls.LogError("SearchItem: eligibleItems is not assigned!");
+                return false;
+            }
+
             PlayerControllerB localPlayer = GameNetworkManager.Instance.localPlayerController;
             for (int i = 0; i < localPlayer.ItemSlots.Length; i++)
             {
@@ -65,11 +72,11 @@ namespace BagWheel.Behaviours
                 if (grabbableObject == null) continue;
                 if (grabbableObject is not BeltBagItem beltBagItem) continue;
 
-                for (int j = beltBagItem.objectsInBag.Count - 1; j >= 0; j--)
+                for (int j = 0; j < beltBagItem.objectsInBag.Count; j++)
                 {
                     GrabbableObject grabbableObjectBag = beltBagItem.objectsInBag[j];
                     if (grabbableObjectBag == null) continue;
-                    if (grabbableObjectBag.itemProperties.itemName.IndexOf(itemName, StringComparison.OrdinalIgnoreCase) == -1) continue;
+                    if (!eligibleItems.Contains(grabbableObjectBag.itemProperties.itemName)) continue;
                     
                     PlayerControllerBPatch.beltBagItem = beltBagItem;
                     PlayerControllerBPatch.bagItem = new KeyValuePair<int, GrabbableObject>(j, grabbableObjectBag);
